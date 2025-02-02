@@ -6,197 +6,564 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Physics-GPT Website</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
-    <link rel="stylesheet" href="dist/css/style.css">
-	<script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --background: 240 10% 3.9%;
+            --foreground: 0 0% 98%;
+            --card: 240 10% 3.9%;
+            --card-foreground: 0 0% 98%;
+            --popover: 240 10% 3.9%;
+            --popover-foreground: 0 0% 98%;
+            --primary: 0 0% 98%;
+            --primary-foreground: 240 5.9% 10%;
+            --secondary: 240 3.7% 15.9%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 240 3.7% 15.9%;
+            --muted-foreground: 240 5% 64.9%;
+            --accent: 240 3.7% 15.9%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 240 3.7% 15.9%;
+            --input: 240 3.7% 15.9%;
+            --ring: 240 4.9% 83.9%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.5;
+            background: linear-gradient(135deg, #06022e 0%, #072a48 50%, #000000 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: hsla(var(--background), 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid hsla(var(--border), 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: hsl(var(--foreground));
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: hsl(var(--foreground));
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: hsl(var(--primary));
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            border: 2px solid white;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn-sm {
+            height: 2rem;
+            padding: 0 0.75rem;
+        }
+
+        .btn-lg {
+            height: 2.75rem;
+            padding: 0 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: hsl(var(--foreground));
+        }
+
+        .btn-ghost:hover {
+            background-color: hsla(var(--foreground), 0.1);
+        }
+
+        .hero {
+            padding-top: 8rem;
+            padding-bottom: 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.34);
+            -webkit-background-clip: text;
+            background-clip: text;
+            
+            
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            max-width: 36rem;
+            margin: 0 auto 2rem;
+        }
+
+        .features {
+            padding: 4rem 0;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .features > p {
+            text-align: center;
+            color: hsl(var(--muted-foreground));
+            max-width: 36rem;
+            margin: 0 auto 3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: hsla(var(--card), 0.8);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid hsla(var(--border), 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .cta {
+            padding: 4rem 0;
+           
+            text-align: center;
+            background-color: hsla(var(--background), 0.5);
+            border-top: 1px solid hsla(var(--border), 0.2);
+            border-bottom: 1px solid hsla(var(--border), 0.2);
+        }
+
+        button {
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.34);
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: hsl(var(--muted-foreground));
+            max-width: 36rem;
+            margin: 0 auto 2rem;
+        }
+
+        footer {
+            background-color: hsla(var(--background), 0.8);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand p {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-links h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: hsl(var(--muted-foreground));
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: hsl(var(--foreground));
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: hsl(var(--foreground));
+        }
+
+        .footer-bottom {
+            border-top: 1px solid hsla(var(--border), 0.2);
+            padding-top: 2rem;
+            text-align: center;
+            color: hsl(var(--muted-foreground));
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at top right, hsla(240, 100%, 50%, 0.1), transparent 50%),
+                radial-gradient(circle at bottom left, hsla(280, 100%, 50%, 0.1), transparent 50%);
+        }
+
+        .title {
+            font-size: 6rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #d3d3d3, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo-container h5 {
+            margin-left: 10px;
+            margin-bottom: 0;
+        }
+
+        /* Add these new styles for the responsive menu */
+        .menu-toggle {
+           
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color:  white;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                transition: 0.4s ease-in-out;
+            }
+
+        .title{
+            color: transparent;
+        }
+
+        .hero h1{
+            font-size: 47px;
+            
+        }
+
+            .nav-links {
+                transition: 0.4s ease-in-out;
+                display: none;
+                position: absolute;
+                top: 100%;
+               
+                left: 0;
+                right: 0;
+                flex-direction: flex;
+                background-color: rgba(148, 148, 148, 0.339);
+                padding: 1rem;
+             
+                border-bottom: 1px solid hsla(var(--border), 0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+        .site-header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+    <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
     <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 </head>
 <body class="is-boxed has-animations">
+    <div class="bg-gradient"></div>
     <div class="body-wrap">
         <header class="site-header">
             <div class="container">
                 <div class="site-header-inner">
                     <div class="brand header-brand">
                         <h1 class="m-0">
-							<a href="#">
-								<img class="header-logo-image" src="dist/images/logo.svg" alt="Logo"> <h5> Physics-GPT </h5>
-                            </a>
+                            <div class="header-logo-container">
+                                <img class="header-logo-image" src="dist/images/logo.svg" alt="Logo">
+                                <h5>Physics-GPT</h5>
+                            </div>
                         </h1>
                     </div>
+                    <nav>
+                        <div class="menu-toggle" id="menuToggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="nav-links" id="navLinks">
+                            <a href="#home">Home</a>
+                            <a href="#features">Features</a>
+                            <a href="#about">About</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </header>
 
-        <main>
-            <section class="hero">
-                <div class="container">
-                    <div class="hero-inner">
-						<div class="hero-copy">
-	                        <h1 class="hero-title mt-0">Revolutionizing AI Integration in Everyday Life</h1>
-	                        <p class="hero-paragraph">Physics-GPT is the ultimate AI-powered wearable, seamlessly capturing and processing real-world data to enhance your daily experiences.</p>
-	                        <div class="hero-cta"><a class="button button-primary" href="#">
-                                Learn More
-                            </a><a class="button" href="#">Get in touch</a></div>
-						</div>
-						<div class="hero-figure anime-element">
-							<svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
-								<rect width="528" height="396" style="fill:transparent;" />
-							</svg>
-							<div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
-							<div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
-							<div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
-							<div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
-							<div class="hero-figure-box hero-figure-box-05"></div>
-							<div class="hero-figure-box hero-figure-box-06"></div>
-							<div class="hero-figure-box hero-figure-box-07"></div>
-							<div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
-							<div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
-							<div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
-						</div>
-                    </div>
+        <section class="hero container">
+            <h1 class="title">Physics-GPT</h1>
+            <h1>Physical Data Processing Assistance</h1>
+            <p>Introducing a revolutionary AI-powered wearable device that seamlessly integrates into your daily routine, capturing and analyzing real-world data to assist you intelligently.</p>
+            <div>
+                <button class="btn btn-primary btn-lg">
+                    Discover Our Technology
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+                <button class="btn btn-ghost btn-lg" style="margin-left: 1rem;">Schedule a Demo</button>
+            </div>
+        </section>
+        
+        <section class="features container">
+            <h2>Revolutionary Features</h2>
+            <p>Explore how Physics-GPT enhances your daily interactions with cutting-edge AI technology.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <h3>AI-Powered Assistance</h3>
+                    <p>Leverage real-time AI insights to organize, analyze, and enhance your everyday experiences.</p>
                 </div>
-            </section>
-
-            <section class="features section">
-                <div class="container">
-					<div class="features-inner section-inner has-bottom-divider">
-                        <div class="features-wrap">
-                            <div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-01.svg" alt="Feature 01">
-                                    </div>
-                                    <h4 class="feature-title mt-24">AI-Powered Assistance</h4>
-                                    <p class="text-sm mb-0">Physics-GPT listens and sees what you do, intelligently organizing and analyzing data to provide real-time insights and support.</p>
-                                </div>
-                            </div>
-							<div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-02.svg" alt="Feature 02">
-                                    </div>
-                                    <h4 class="feature-title mt-24">Seamless Integration</h4>
-                                    <p class="text-sm mb-0">Designed as a sleek necklace pendant, Physics-GPT fits effortlessly into your lifestyle while staying always connected.</p>
-                                </div>
-                            </div>
-							<div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-05.svg" alt="Feature 05">
-                                    </div>
-                                    <h4 class="feature-title mt-24">Unlock the Future of AI Wearables</h4>
-                                    <p class="text-sm mb-0">Experience next-level AI assistance with Physics-GPT, designed to revolutionize how we interact with technology.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                    <h3>Data Processing Copilot</h3>
+                    <p>Physics-GPT captures your perceptions to process and organize the experiences.</p>
                 </div>
-            </section>
-
-            <section class="pricing section">
-                <div class="container-sm">
-                    <div class="pricing-inner section-inner">
-                        <div class="pricing-header text-center">
-                            <h2 class="section-title mt-0">Upcoming 2025</h2>
-                            <p class="section-paragraph mb-0">Physics-GPT functions as an omnipresent cognitive augmentation system, autonomously capturing and semantically structuring multimodal sensory input. Leveraging advanced AI-driven contextual analysis, it distills, organizes, and synthesizes perceptual data into actionable insights, seamlessly interfacing with human cognition to enhance retention, comprehension, and real-time decision-making.</p>
-                        </div>
-						<div class="pricing-tables-wrap">
-                            <div class="pricing-table">
-                                <div class="pricing-table-inner is-revealing">
-                                    <div class="pricing-table-main">
-                                        <div class="pricing-table-header pb-24">
-                                            <div class="pricing-table-price"><span class="pricing-table-price-amount h1">Physics-GPT </span><span class="text-xs">2025</span></div>
-                                        </div>
-										<div class="pricing-table-features-title text-xs pt-24 pb-24">Our Vision</div>
-                                        <ul class="pricing-table-features list-reset text-xs">
-                                            <li>
-                                                <span>Redefining Human-Technology Interaction</span>
-                                            </li>
-                                            <li>
-                                                <span>Enhancing Human Perception</span>
-                                            </li>
-                                            <li>
-                                                <span>AI at Your Neck</span>
-                                            </li>
-											<li>
-												<span>Assistance in Data Processing</span>
-                                        </ul>
-                                    </div>
-                                    <div class="pricing-table-cta mb-8">
-                                        <a class="button button-primary button-shadow button-block" href="#">Subscribe Email Newsletter</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <h3>Advanced Privacy & Security</h3>
+                    <p>Industry-leading encryption and on-device processing ensure your data remains protected.</p>
                 </div>
-            </section>
-
-			<section class="cta section">
-				<div class="container">
-					<div class="cta-inner section-inner">
-						<h3 class="section-title mt-0">Get in touch with us</h3>
-						<div class="cta-cta">
-							<a class="button button-primary button-wide-mobile" href="#">Contact</a>
-						</div>
-					</div>
-				</div>
-			</section>
-        </main>
-
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <h3>Lightweight & Discreet</h3>
+                    <p>A compact and stylish design allows Physics-GPT to integrate seamlessly into your daily life as a necklace.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta container">
+            <h2>Experience the Future of physical AI</h2>
+            <p>Join a new era of human-AI interaction. Discover how Physics-GPT can enhance your everyday life with real-time intelligence.</p>
+            <button class="btn btn-primary btn-lg">Get Started Today</button>
+        </section>
+        
         <footer class="site-footer">
             <div class="container">
-                <div class="site-footer-inner">
-                    <div class="brand footer-brand">
-						<a href="#">
-							<img class="header-logo-image" src="dist/images/logo.svg" alt="Logo">
-						</a>
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <h2>Physics-GPT</h2>
+                        <p>Bridging AI and the real world with seamless, intelligent technology.</p>
                     </div>
-                    <ul class="footer-links list-reset">
-                        <li>
-                            <a href="#">Contact</a>
-                        </li>
-                        <li>
-                            <a href="#">About us</a>
-                        </li>
-                        <li>
-                            <a href="#">FAQ's</a>
-                        </li>
-                        <li>
-                            <a href="#">Support</a>
-                        </li>
-                    </ul>
-                    <ul class="footer-social-links list-reset">
-                        <li>
-                            <a href="#">
-                                <span class="screen-reader-text">Facebook</span>
-                                <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.023 16L6 9H3V6h3V4c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V6H13l-1 3H9.28v7H6.023z" fill="#0270D7"/>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="screen-reader-text">Twitter</span>
-                                <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 3c-.6.3-1.2.4-1.9.5.7-.4 1.2-1 1.4-1.8-.6.4-1.3.6-2.1.8-.6-.6-1.5-1-2.4-1-1.7 0-3.2 1.5-3.2 3.3 0 .3 0 .5.1.7-2.7-.1-5.2-1.4-6.8-3.4-.3.5-.4 1-.4 1.7 0 1.1.6 2.1 1.5 2.7-.5 0-1-.2-1.5-.4C.7 7.7 1.8 9 3.3 9.3c-.3.1-.6.1-.9.1-.2 0-.4 0-.6-.1.4 1.3 1.6 2.3 3.1 2.3-1.1.9-2.5 1.4-4.1 1.4H0c1.5.9 3.2 1.5 5 1.5 6 0 9.3-5 9.3-9.3v-.4C15 4.3 15.6 3.7 16 3z" fill="#0270D7"/>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="screen-reader-text">Google</span>
-                                <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.9 7v2.4H12c-.2 1-1.2 3-4 3-2.4 0-4.3-2-4.3-4.4 0-2.4 2-4.4 4.3-4.4 1.4 0 2.3.6 2.8 1.1l1.9-1.8C11.5 1.7 9.9 1 8 1 4.1 1 1 4.1 1 8s3.1 7 7 7c4 0 6.7-2.8 6.7-6.8 0-.5 0-.8-.1-1.2H7.9z" fill="#0270D7"/>
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="footer-copyright">&copy; 2025 Physics-GPT, all rights reserved</div>
+                    <div class="footer-links">
+                        <div>
+                            <h3>Features</h3>
+                            <ul>
+                                <li><a href="/ai-assistance">AI Assistance</a></li>
+                                <li><a href="/privacy-security">Privacy & Security</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Company</h3>
+                            <ul>
+                                <li><a href="/about">About Us</a></li>
+                                <li><a href="/careers">Careers</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Connect</h3>
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/physics-gpt" target="_blank" rel="noreferrer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                </a>
+                                <a href="mailto:contact@physics-gpt.com">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Physics-GPT, Inc. All rights reserved.</p>
                 </div>
             </div>
         </footer>
-    </div>
+        
 
     <script src="dist/js/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const heroSection = document.querySelector('.hero');
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    header.classList.toggle('is-sticky', !entry.isIntersecting);
+                },
+                { rootMargin: '-1px 0px 0px 0px', threshold: [1] }
+            );
+
+            if (heroSection) {
+                observer.observe(heroSection);
+            }
+
+            // Toggle menu on mobile
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Mouse move effect
+            document.addEventListener('mousemove', (event) => {
+                const mouseX = event.clientX;
+                const mouseY = event.clientY;
+
+                const gradientElement = document.createElement('div');
+                gradientElement.style.position = 'fixed';
+                gradientElement.style.left = '0';
+                gradientElement.style.top = '0';
+                gradientElement.style.right = '0';
+                gradientElement.style.bottom = '0';
+                gradientElement.style.pointerEvents = 'none';
+                gradientElement.style.background = `radial-gradient(600px at ${mouseX}px ${mouseY}px, rgba(29, 78, 216, 0.07), transparent 80%)`;
+                gradientElement.style.zIndex = '30';
+
+                document.body.appendChild(gradientElement);
+
+                setTimeout(() => {
+                    gradientElement.remove();
+                }, 300);
+            });
+        });
+    </script>
 </body>
 </html>
+
