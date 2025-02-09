@@ -143,17 +143,26 @@
             z-index: 1000;
         }
 
-.img-section{
-    max-width: 30%;
-    text-align: center;
-    height: 100%;
-    margin-top: 20px;
-}
+        .img-section {
+        width: 100%;
+        max-width: 300px; /* Adjust this value to control the image size */
+        margin: 20px auto; /* Centers the image and provides vertical spacing */
+        text-align: center;
+    }
 
-.img1{
-    border: none;
-    border-radius: 12px;
-}
+    .img1 {
+        width: 100%;
+        height: auto;
+        border: none;
+        border-radius: 12px;
+    }
+
+    /* Media query for mobile devices */
+    @media (max-width: 768px) {
+        .img-section {
+            max-width: 80%; /* Adjust this value for mobile if needed */
+        }
+    }
 
     </style>
 </head>
