@@ -55,7 +55,7 @@
 
         header {
             position: fixed;
-            top: 32px; /* Adjust for promotional banner */
+    
             left: 0;
             right: 0;
             z-index: 1000;
@@ -397,27 +397,9 @@
         }
 
         /* New styles for promotional banner */
-        .promo-banner {
-            background-color: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-            text-align: center;
-            padding: 0.5rem;
-            position: fixed;
-            top: -50px;
-            left: 0;
-            right: 0;
-            z-index: 1002;
-            transition: top 0.3s ease-in-out;
-        }
 
-        .promo-banner.active {
-            top: 0;
-        }
 
-        .promo-banner a {
-            color: hsl(var(--primary-foreground));
-            text-decoration: underline;
-        }
+        
 
         @media (max-width: 768px) {
             .menu-toggle {
@@ -469,10 +451,7 @@
 </head>
 <body class="is-boxed has-animations">
     <div class="bg-gradient"></div>
-    <div class="body-wrap">
-        <div class="promo-banner" id="promoBanner">
-            Check out our partner <a href="https://holocraft-technologies.com" target="_blank">HoloCraft Technologies</a>!
-        </div>
+    
         <header class="site-header">
             <div class="container">
                 <div class="site-header-inner">
